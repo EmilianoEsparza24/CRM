@@ -1,7 +1,7 @@
 <template>
   <Navbar @logout="logout" />
 
-  <!-- Formulario de contacto -->
+  <!-- Formulario de contacto no creo tus mentirass -->
   <div class="py-20  text-center">
     <h1 class="text-3xl font-bold text-gray-800 tracking-wide">📝 Formulario de Contacto</h1>
     <p class="text-sm text-gray-600 mt-2">Completa los campos a continuación y nos pondremos en contacto contigo.</p>
