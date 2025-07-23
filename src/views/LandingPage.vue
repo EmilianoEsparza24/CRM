@@ -104,11 +104,6 @@
     </div>
 
     <!-- reCAPTCHA -->
-    <div
-      class="g-recaptcha mt-4"
-      ref="recaptcha"
-      :data-sitekey="recaptchaSiteKey"
-    ></div>
 
     <!-- Botón de envío -->
     <button
@@ -176,22 +171,10 @@ const success = ref(false)
 const error = ref('')
 const showTerms = ref(false)
 const recaptcha = ref(null)
-const recaptchaWidgetId = ref(null)
 
 const apiUrl = import.meta.env.VITE_API_URL
 const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
 
-// Inicializa reCAPTCHA
-onMounted(() => {
-  const interval = setInterval(() => {
-    if (window.grecaptcha && recaptcha.value && !recaptchaWidgetId.value) {
-      recaptchaWidgetId.value = grecaptcha.render(recaptcha.value, {
-        sitekey: recaptchaSiteKey
-      })
-      clearInterval(interval)
-    }
-  }, 300)
-})
 
 // Manejo de envío
 const handleSubmit = async () => {
