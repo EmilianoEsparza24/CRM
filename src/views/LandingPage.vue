@@ -154,8 +154,10 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import emailjs from 'emailjs-com'
+import { useReCaptcha } from 'vue-recaptcha-v3'
 
 const router = useRouter()
+const { executeRecaptcha } = useReCaptcha()
 
 const emailjsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
 const emailjsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
@@ -198,18 +200,13 @@ const handleSubmit = async () => {
     return
   }
 
-  if (!window.grecaptcha || typeof grecaptcha.getResponse !== 'function') {
-    error.value = 'reCAPTCHA aún no se ha cargado.'
-    return
-  }
-
-  const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetId.value)
-  if (!recaptchaToken) {
-    error.value = 'Completa el reCAPTCHA antes de continuar.'
-    return
-  }
-
   try {
+    const recaptchaToken = await executeRecaptcha('contact_form') // etiqueta personalizada
+    if (!recaptchaToken) {
+      error.value = 'Error al validar reCAPTCHA.'
+      return
+    }
+
     const res = await fetch(`${apiUrl}/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -219,19 +216,19 @@ const handleSubmit = async () => {
     if (res.ok) {
       success.value = true
       error.value = ''
-      grecaptcha.reset(recaptchaWidgetId.value)
 
       await emailjs.send(
         emailjsServiceId,
-        emailjsTemplateId,{
+        emailjsTemplateId,
+        {
           name: form.name,
           email: form.email,
           phone: form.phone,
           message: form.message
-        }, 
+        },
         emailjsUserId
       )
-      
+
       Object.assign(form, {
         name: '',
         email: '',
