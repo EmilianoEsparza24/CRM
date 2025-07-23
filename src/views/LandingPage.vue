@@ -181,10 +181,6 @@ const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
 
 const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
 
-if (!recaptchaSiteKey) {
-  console.error('❌ No se encontró VITE_SITE_KEY en tu archivo .env')
-}
-
 
 onMounted(() => {
   const renderCaptcha = () => {
