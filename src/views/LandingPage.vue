@@ -104,7 +104,11 @@
     </div>
 
     <!-- reCAPTCHA -->
-     <div class="g-recaptcha mt-4" ref="recaptcha"></div>
+     <div
+      class="g-recaptcha mt-4"
+      ref="recaptcha"
+      :data-sitekey="recaptchaSiteKey"
+    ></div>
 
     <!-- Botón de envío -->
     <button
@@ -174,6 +178,13 @@ const recaptchaWidgetId = ref(null)
 
 const apiUrl = import.meta.env.VITE_API_URL
 const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
+
+const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
+
+if (!recaptchaSiteKey) {
+  console.error('❌ No se encontró VITE_SITE_KEY en tu archivo .env')
+}
+
 
 onMounted(() => {
   const renderCaptcha = () => {
