@@ -176,6 +176,7 @@ const success = ref(false)
 const error = ref('')
 const showTerms = ref(false)
 const recaptcha = ref(null)
+const recaptchaWidgetId = ref(null)
 
 const apiUrl = import.meta.env.VITE_API_URL
 const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
