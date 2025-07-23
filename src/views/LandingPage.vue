@@ -104,11 +104,7 @@
     </div>
 
     <!-- reCAPTCHA -->
-     <div
-      class="g-recaptcha mt-4"
-      ref="recaptcha"
-      :data-sitekey="recaptchaSiteKey"
-    ></div>
+     <div class="g-recaptcha mt-4" ref="recaptcha"></div>
 
     <!-- Botón de envío -->
     <button
@@ -154,15 +150,12 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import emailjs from 'emailjs-com'
-// import { useReCaptcha } from 'vue-recaptcha-v3'
 
 const router = useRouter()
-// const { executeRecaptcha } = useReCaptcha()
 
 const emailjsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
 const emailjsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
 const emailjsUserId = import.meta.env.VITE_EMAILJS_USER_ID
-
 
 const form = reactive({
   name: '',
@@ -175,6 +168,7 @@ const form = reactive({
 const success = ref(false)
 const error = ref('')
 const showTerms = ref(false)
+
 const recaptcha = ref(null)
 const recaptchaWidgetId = ref(null)
 
@@ -182,35 +176,39 @@ const apiUrl = import.meta.env.VITE_API_URL
 const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
 
 onMounted(() => {
-  if (window.grecaptcha && recaptcha.value) {
-    if (recaptcha.value.children.length === 0) { // ⛔ evita múltiples renders
+  const renderCaptcha = () => {
+    if (
+      window.grecaptcha &&
+      recaptcha.value &&
+      recaptcha.value.children.length === 0 &&
+      recaptchaWidgetId.value === null
+    ) {
       recaptchaWidgetId.value = grecaptcha.render(recaptcha.value, {
         sitekey: recaptchaSiteKey
       })
     }
+  }
+
+  if (window.grecaptcha) {
+    renderCaptcha()
   } else {
     const interval = setInterval(() => {
-      if (window.grecaptcha && recaptcha.value) {
-        if (recaptcha.value.children.length === 0) {
-          recaptchaWidgetId.value = grecaptcha.render(recaptcha.value, {
-            sitekey: recaptchaSiteKey
-          })
-        }
+      if (window.grecaptcha) {
+        renderCaptcha()
         clearInterval(interval)
       }
     }, 300)
   }
 })
 
-// Manejo de envío
 const handleSubmit = async () => {
   if (!form.acceptedTerms) {
     error.value = 'Debes aceptar los términos y condiciones.'
     return
   }
 
-  if (!window.grecaptcha || typeof grecaptcha.getResponse !== 'function') {
-    error.value = 'reCAPTCHA aún no se ha cargado.'
+  if (!window.grecaptcha || recaptchaWidgetId.value === null) {
+    error.value = 'reCAPTCHA aún no está listo.'
     return
   }
 
@@ -230,7 +228,7 @@ const handleSubmit = async () => {
     if (res.ok) {
       success.value = true
       error.value = ''
-       grecaptcha.reset(recaptchaWidgetId.value)
+      grecaptcha.reset(recaptchaWidgetId.value)
 
       await emailjs.send(
         emailjsServiceId,
@@ -257,10 +255,5 @@ const handleSubmit = async () => {
   } catch (e) {
     error.value = 'Error de red: ' + e.message
   }
-}
-
-const logout = () => {
-  localStorage.removeItem('token')
-  router.push('/login')
 }
 </script>
