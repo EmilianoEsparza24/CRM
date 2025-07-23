@@ -182,14 +182,24 @@ const apiUrl = import.meta.env.VITE_API_URL
 const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
 
 onMounted(() => {
-  const interval = setInterval(() => {
-    if (window.grecaptcha && recaptcha.value && !recaptchaWidgetId.value) {
+  if (window.grecaptcha && recaptcha.value) {
+    if (recaptcha.value.children.length === 0) { // ⛔ evita múltiples renders
       recaptchaWidgetId.value = grecaptcha.render(recaptcha.value, {
         sitekey: recaptchaSiteKey
       })
-      clearInterval(interval)
     }
-  }, 300)
+  } else {
+    const interval = setInterval(() => {
+      if (window.grecaptcha && recaptcha.value) {
+        if (recaptcha.value.children.length === 0) {
+          recaptchaWidgetId.value = grecaptcha.render(recaptcha.value, {
+            sitekey: recaptchaSiteKey
+          })
+        }
+        clearInterval(interval)
+      }
+    }, 300)
+  }
 })
 
 // Manejo de envío
