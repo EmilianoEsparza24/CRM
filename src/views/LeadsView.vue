@@ -20,7 +20,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="lead in leads" :key="lead.id" class="border-t hover:bg-green-50 transition">
+            <tr v-for="lead in paginatedLeads" :key="lead.id" class="border-t hover:bg-green-50 transition">
               <td class="p-3">{{ lead.name }}</td>
               <td class="p-3">{{ lead.email }}</td>
               <td class="p-3">{{ lead.phone }}</td>
@@ -40,7 +40,23 @@
             </tr>
           </tbody>
         </table>
-
+        <div v-if="totalPages > 1" class="flex justify-center items-center space-x-4 py-4">
+          <button
+            @click="prevPage"
+            :disabled="currentPage === 1"
+            class="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <span class="text-gray-700">Página {{ currentPage }} de {{ totalPages }}</span>
+          <button
+            @click="nextPage"
+            :disabled="currentPage === totalPages"
+            class="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+        </div>
         <p v-else class="p-6 text-gray-600 text-center">No hay leads disponibles por el momento.</p>
       </div>
     </div>
@@ -48,14 +64,32 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 
 const leads = ref([])
 const router = useRouter()
+const currentPage = ref(1)
+const perPage = ref(5)
 
+const paginatedLeads = computed(() => {
+  const start = (currentPage.value - 1) * perPage.value
+  return leads.value.slice(start, start + perPage.value)
+})
+
+const totalPages = computed(() => {
+  return Math.ceil(leads.value.length / perPage.value)
+})
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--
+}
 const fetchLeads = async () => {
   try {
     const res = await axios.get(import.meta.env.VITE_API_URL + '/leads', {
