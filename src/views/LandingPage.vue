@@ -1,151 +1,128 @@
 <template>
-  <div class="bg-gray-50 text-gray-800 font-sans">
-    <header class="bg-white shadow-md">
+  <div class="bg-gray-900 text-gray-200 font-sans min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
       <div class="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
-        <h1 class="text-xl font-bold text-green-600">LeadCRM</h1>
-        <a href="/login" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+        <h1 class="text-xl font-bold text-emerald-400">CRM</h1>
+        <a href="/login" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition font-medium">
           Comenzar
         </a>
       </div>
     </header>
 
-    <section class="py-20 px-6 text-center bg-gradient-to-b from-green-100 to-white">
-      <h2 class="text-4xl font-extrabold mb-4">Convierte visitas en clientes</h2>
-      <p class="text-lg mb-6 max-w-2xl mx-auto">
-        Un <strong>lead</strong> es una persona interesada en tus servicios. Con LeadCRM, puedes capturarlos, darles seguimiento y cerrar más ventas con facilidad.
-      </p>
-      <a href="/login" class="bg-green-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-700 transition">
-        Empieza gratis
-      </a>
-    </section>
-
-    <section class="max-w-5xl mx-auto py-16 px-4 grid md:grid-cols-3 gap-8 text-left">
-      <div>
-        <h3 class="text-xl font-semibold mb-2">📩 Captura Leads</h3>
-        <p>Formulario integrado para recopilar información de clientes potenciales en segundos.</p>
-      </div>
-      <div>
-        <h3 class="text-xl font-semibold mb-2">📊 Organiza y Clasifica</h3>
-        <p>Visualiza todos tus leads en un panel claro, con filtros por estado y prioridad.</p>
-      </div>
-      <div>
-        <h3 class="text-xl font-semibold mb-2">📈 Mejora tus conversiones</h3>
-        <p>Haz seguimiento de cada contacto, optimiza tus campañas y aumenta tus cierres de venta.</p>
-      </div>
-    </section>
-
-    <div class="py-20  text-center">
-    <h1 class="text-3xl font-bold text-gray-800 tracking-wide">📝 Formulario de Contacto</h1>
-    <p class="text-sm text-gray-600 mt-2">Completa los campos a continuación y nos pondremos en contacto contigo.</p>
-  </div>
-
-  <form
-    @submit.prevent="handleSubmit"
-    class="w-full max-w-xl p-6 space-y-4 bg-white rounded-lg shadow mx-auto"
-  >
-    <!-- Nombre -->
-    <div>
-      <label class="block text-sm font-medium mb-1">Nombre completo:</label>
-      <input
-        v-model="form.name"
-        required
-        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-green-200"
-      />
+    <!-- Contact Form Section -->
+    <div class="py-20 text-center">
+      <h1 class="text-3xl font-bold text-white tracking-wide"> Formulario de Contacto</h1>
+      <p class="text-sm text-gray-400 mt-2">Completa los campos a continuación y nos pondremos en contacto contigo.</p>
     </div>
 
-    <!-- Correo -->
-    <div>
-      <label class="block text-sm font-medium mb-1">Correo:</label>
-      <input
-        v-model="form.email"
-        type="email"
-        required
-        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-green-200"
-      />
-    </div>
-
-    <!-- Teléfono -->
-    <div>
-      <label class="block text-sm font-medium mb-1">Teléfono:</label>
-      <input
-        v-model="form.phone"
-        required
-        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-green-200"
-      />
-    </div>
-
-    <!-- Mensaje -->
-    <div>
-      <label class="block text-sm font-medium mb-1">Mensaje:</label>
-      <textarea
-        v-model="form.message"
-        required
-        rows="4"
-        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-green-200"
-      ></textarea>
-    </div>
-
-    <!-- Términos y condiciones -->
-    <div class="flex items-center space-x-3">
-      <input
-        type="checkbox"
-        id="terms"
-        v-model="form.acceptedTerms"
-        class="h-4 w-4 text-green-600 border-gray-300 rounded"
-      />
-      <label for="terms" class="text-sm text-gray-700">Acepto los</label>
-      <button
-        type="button"
-        @click="showTerms = true"
-        class="text-sm text-blue-600 underline hover:text-blue-800"
-      >
-        Términos y condiciones
-      </button>
-    </div>
-
-    <!-- reCAPTCHA -->
-    <div
-      class="g-recaptcha mt-4"
-      ref="recaptcha"
-      :data-sitekey="recaptchaSiteKey"
-    ></div>
-
-    <!-- Botón de envío -->
-    <button
-      type="submit"
-      class="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition duration-150 ease-in-out"
+    <form
+      @submit.prevent="handleSubmit"
+      class="w-full max-w-xl p-8 space-y-4 bg-gray-800 rounded-xl shadow-lg mx-auto mb-20"
     >
-      Enviar
-    </button>
+      <!-- Nombre -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Nombre completo:</label>
+        <input
+          v-model="form.name"
+          required
+          class="w-full bg-gray-700 border border-gray-600 text-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        />
+      </div>
 
-    <!-- Mensajes de respuesta -->
-    <p v-if="success" class="text-green-600 mt-2">✅ Enviado correctamente</p>
-    <p v-if="error" class="text-red-600 mt-2">❌ {{ error }}</p>
-  </form>
+      <!-- Correo -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Correo:</label>
+        <input
+          v-model="form.email"
+          type="email"
+          required
+          class="w-full bg-gray-700 border border-gray-600 text-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        />
+      </div>
 
-  <!-- Modal de Términos -->
-  <div
-    v-if="showTerms"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  >
-    <div class="bg-white p-6 rounded-lg max-w-lg w-full shadow-lg overflow-y-auto max-h-[80vh]">
-      <h2 class="text-lg font-semibold mb-4">Términos y Condiciones</h2>
-      <p class="text-sm text-gray-700 mb-6">
-        Aquí van tus términos y condiciones completos...
-      </p>
-      <div class="flex justify-end space-x-2">
+      <!-- Teléfono -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Teléfono:</label>
+        <input
+          v-model="form.phone"
+          required
+          class="w-full bg-gray-700 border border-gray-600 text-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Mensaje -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Mensaje:</label>
+        <textarea
+          v-model="form.message"
+          required
+          rows="4"
+          class="w-full bg-gray-700 border border-gray-600 text-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        ></textarea>
+      </div>
+
+      <!-- Términos y condiciones -->
+      <div class="flex items-center space-x-3">
+        <input
+          type="checkbox"
+          id="terms"
+          v-model="form.acceptedTerms"
+          class="h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 rounded focus:ring-emerald-500"
+        />
+        <label for="terms" class="text-sm text-gray-400">Acepto los</label>
         <button
-          @click="showTerms = false"
-          class="text-gray-600 hover:text-gray-800 px-4 py-2 text-sm"
+          type="button"
+          @click="showTerms = true"
+          class="text-sm text-emerald-400 hover:text-emerald-300 underline"
         >
-          Cerrar
+          Términos y condiciones
         </button>
       </div>
-    </div>
-  </div>
 
-    <footer class="text-center text-sm text-gray-600 py-6">
-      © 2025 LeadCRM — Todos los derechos reservados.
+      <!-- reCAPTCHA -->
+      <div
+        class="g-recaptcha mt-4"
+        ref="recaptcha"
+        :data-sitekey="recaptchaSiteKey"
+      ></div>
+
+      <!-- Botón de envío -->
+      <button
+        type="submit"
+        class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg transition font-medium"
+      >
+        Enviar
+      </button>
+
+      <!-- Mensajes de respuesta -->
+      <p v-if="success" class="text-emerald-400 mt-2">✅ Enviado correctamente</p>
+      <p v-if="error" class="text-red-400 mt-2">❌ {{ error }}</p>
+    </form>
+
+    <!-- Modal de Términos -->
+    <div
+      v-if="showTerms"
+      class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    >
+      <div class="bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-lg overflow-y-auto max-h-[80vh] border border-gray-700">
+        <h2 class="text-lg font-semibold mb-4 text-white">Términos y Condiciones</h2>
+        <p class="text-sm text-gray-300 mb-6">
+          No me reprube profe :b
+        </p>
+        <div class="flex justify-end">
+          <button
+            @click="showTerms = false"
+            class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-sm text-gray-500 py-8 bg-gray-800">
     </footer>
   </div>
 </template>
@@ -160,7 +137,6 @@ const router = useRouter()
 const emailjsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
 const emailjsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
 const emailjsUserId = import.meta.env.VITE_EMAILJS_USER_ID
-
 
 const form = reactive({
   name: '',

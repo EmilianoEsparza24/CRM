@@ -3,6 +3,7 @@ import LoginView from '../src/views/LoginView.vue'
 import LeadsView from '../src/views/LeadsView.vue'
 import Formulario from '../src/components/ContactForm.vue'
 import LandingPage from '../src/views/LandingPage.vue'
+import Inicio from '../src/views/Inicio.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,7 +11,8 @@ const router = createRouter({
     { path: '/login', name: 'Login', component: LoginView },
     { path: '/leads', name: 'Leads', component: LeadsView },
     { path: '/formulario', name: 'Formulario', component: Formulario },
-    { path: '/', name: 'LandingPage', component: LandingPage }
+    { path: '/', name: 'LandingPage', component: LandingPage },
+    { path: '/inicio', name: 'Inicio', component: Inicio }
   ]
 })
 
