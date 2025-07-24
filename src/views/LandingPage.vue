@@ -205,7 +205,7 @@ const handleSubmit = async () => {
   }
 
   try {
-    const res = await fetch(${apiUrl}/contact, {
+    const res = await fetch('${apiUrl}/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...form, recaptchaToken })
