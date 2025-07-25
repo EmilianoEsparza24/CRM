@@ -189,38 +189,35 @@ onMounted(() => {
 })
 
 const handleSubmit = async () => {
-  if (!form.acceptedTerms) {
-    error.value = 'Debes aceptar los términos y condiciones.'
-    return
-  }
-
-  if (!window.grecaptcha || recaptchaWidgetId.value === null) {
-    error.value = 'reCAPTCHA aún no está listo.'
-    return
-  }
-
-  const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetId.value)
-  if (!recaptchaToken) {
-    error.value = 'Completa el reCAPTCHA antes de continuar.'
-    return
-  }
+  loading.value = true
+  error.value = ''
+  success.value = false
 
   try {
-    const res = await axios.post(
-    'https://crm-back-00mt.onrender.com/api/contact',
-    {
+    const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetId.value)
+
+    if (!recaptchaToken) {
+      error.value = 'Por favor verifica el reCAPTCHA.'
+      loading.value = false
+      return
+    }
+
+    console.log('Enviando datos al backend:', {
       ...form,
       recaptchaToken
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json'
+    })
+
+    const res = await axios.post(
+      'https://crm-back-00mt.onrender.com/api/contact',
+      { ...form, recaptchaToken },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
-    }
-  )
+    )
 
-
-    if (res.ok) {
+    if (res.status === 200) {
       success.value = true
       error.value = ''
       grecaptcha.reset(recaptchaWidgetId.value)
@@ -248,7 +245,14 @@ const handleSubmit = async () => {
       error.value = 'Error al enviar. Intenta más tarde.'
     }
   } catch (e) {
-    error.value = 'Error de red: ' + e.message
+    if (e.response?.data?.error) {
+      error.value = '❌ ' + e.response.data.error
+    } else {
+      error.value = 'Error inesperado: ' + e.message
+    }
+  } finally {
+    loading.value = false
   }
 }
+
 </script>
