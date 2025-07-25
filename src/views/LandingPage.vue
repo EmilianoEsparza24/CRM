@@ -89,10 +89,11 @@
 
       <!-- Botón de envío -->
       <button
-        type="submit"
-        class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg transition font-medium"
-      >
-        Enviar
+          type="submit"
+          :disabled="loading"
+          class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ loading ? 'Enviando...' : 'Enviar' }}
       </button>
 
       <!-- Mensajes de respuesta -->
@@ -149,6 +150,7 @@ const form = reactive({
 
 const success = ref(false)
 const error = ref('')
+const loading = ref(false)
 const showTerms = ref(false)
 
 const recaptcha = ref(null)
