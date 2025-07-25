@@ -131,6 +131,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import emailjs from 'emailjs-com'
+import axios from 'axios'
 
 const router = useRouter()
 
@@ -205,11 +206,19 @@ const handleSubmit = async () => {
   }
 
   try {
-    const res = await fetch(`https://crm-back-00mt.onrender.com/api/contact`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, recaptchaToken })
-    })
+    const res = await axios.post(
+    'https://crm-back-00mt.onrender.com/api/contact',
+    {
+      ...form,
+      recaptchaToken
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+
 
     if (res.ok) {
       success.value = true
