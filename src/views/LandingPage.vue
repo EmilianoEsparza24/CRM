@@ -89,11 +89,10 @@
 
       <!-- Botón de envío -->
       <button
-          type="submit"
-          :disabled="loading"
-          class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {{ loading ? 'Enviando...' : 'Enviar' }}
+        type="submit"
+        class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg transition font-medium"
+      >
+        Enviar
       </button>
 
       <!-- Mensajes de respuesta -->
@@ -132,7 +131,6 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import emailjs from 'emailjs-com'
-import axios from 'axios'
 
 const router = useRouter()
 
@@ -150,7 +148,6 @@ const form = reactive({
 
 const success = ref(false)
 const error = ref('')
-const loading = ref(false)
 const showTerms = ref(false)
 
 const recaptcha = ref(null)
@@ -191,35 +188,30 @@ onMounted(() => {
 })
 
 const handleSubmit = async () => {
-  loading.value = true
-  error.value = ''
-  success.value = false
+  if (!form.acceptedTerms) {
+    error.value = 'Debes aceptar los términos y condiciones.'
+    return
+  }
+
+  if (!window.grecaptcha || recaptchaWidgetId.value === null) {
+    error.value = 'reCAPTCHA aún no está listo.'
+    return
+  }
+
+  const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetId.value)
+  if (!recaptchaToken) {
+    error.value = 'Completa el reCAPTCHA antes de continuar.'
+    return
+  }
 
   try {
-    const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetId.value)
-
-    if (!recaptchaToken) {
-      error.value = 'Por favor verifica el reCAPTCHA.'
-      loading.value = false
-      return
-    }
-
-    console.log('Enviando datos al backend:', {
-      ...form,
-      recaptchaToken
+    const res = await fetch(`${apiUrl}/contac`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...form, recaptchaToken })
     })
 
-    const res = await axios.post(
-      'https://crm-back-00mt.onrender.com/api/contact',
-      { ...form, recaptchaToken },
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-
-    if (res.status === 200) {
+    if (res.ok) {
       success.value = true
       error.value = ''
       grecaptcha.reset(recaptchaWidgetId.value)
@@ -247,14 +239,7 @@ const handleSubmit = async () => {
       error.value = 'Error al enviar. Intenta más tarde.'
     }
   } catch (e) {
-    if (e.response?.data?.error) {
-      error.value = '❌ ' + e.response.data.error
-    } else {
-      error.value = 'Error inesperado: ' + e.message
-    }
-  } finally {
-    loading.value = false
+    error.value = 'Error de red: ' + e.message
   }
 }
-
 </script>
