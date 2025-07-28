@@ -43,9 +43,24 @@
 
         <button
           type="submit"
-          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+          :disabled="loading"
+          class="w-full flex justify-center items-center gap-2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
         >
-          Iniciar sesión
+          <svg
+            v-if="loading"
+            class="animate-spin h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+          <span>{{ loading ? 'Ingresando...' : 'Iniciar sesión' }}</span>
         </button>
       </form>
 
@@ -64,9 +79,11 @@ import { useRouter } from 'vue-router'
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
+const loading = ref(false)
 const router = useRouter()
 
 const login = async () => {
+  loading.value = true
   try {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
       email: email.value,
@@ -77,6 +94,8 @@ const login = async () => {
     router.push('/leads')
   } catch (e) {
     alert('Credenciales inválidas')
+  } finally {
+    loading.value = false
   }
 }
 </script>

@@ -111,9 +111,26 @@
       ></div>
 
       <!-- Botón enviar -->
-      <button type="submit" class="btn btn-primary btn-submit" :disabled="isLoading">
-            <span v-if="isLoading">Enviando...</span>
-            <span v-else>Enviar</span>
+      <button
+        type="submit"
+        class="w-full flex justify-center items-center gap-2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+        :disabled="isLoading"
+      >
+        <svg
+          v-if="isLoading"
+          class="animate-spin h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+          ></path>
+        </svg>
+        <span>{{ isLoading ? 'Enviando...' : 'Enviar mensaje' }}</span>
       </button>
 
       <!-- Mensajes -->
