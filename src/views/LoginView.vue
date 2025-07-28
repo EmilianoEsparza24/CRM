@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-green-100 px-4">
-    <div class="bg-white shadow-lg rounded-lg px-8 py-6 w-full max-w-sm border border-green-200">
-      <h2 class="text-2xl font-bold mb-6 text-center text-green-700">Iniciar sesión</h2>
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200 px-4">
+    <div class="bg-white shadow-xl rounded-2xl px-10 py-8 w-full max-w-md border border-blue-300">
+      <h2 class="text-3xl font-bold mb-6 text-center text-blue-700">Bienvenido de nuevo</h2>
 
-      <form @submit.prevent="login" class="space-y-4">
+      <form @submit.prevent="login" class="space-y-6">
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
           <input
@@ -11,8 +11,8 @@
             id="email"
             type="email"
             required
-            class="input"
-            placeholder="ejemplo@correo.com"
+            class="input focus:ring-2 focus:ring-blue-400"
+            placeholder="usuario@ejemplo.com"
           />
         </div>
 
@@ -24,31 +24,33 @@
               v-model="password"
               id="password"
               required
-              class="input pr-10"
-              placeholder="Tu contraseña"
+              class="input pr-12 focus:ring-2 focus:ring-blue-400"
+              placeholder="••••••••"
             />
             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-              <input
-                type="checkbox"
-                id="showPwd"
-                v-model="showPassword"
-                class="h-4 w-4 text-green-600"
-              />
-              <label for="showPwd" class="ml-2 text-xs text-gray-600">Ver</label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="showPwd"
+                  v-model="showPassword"
+                  class="accent-blue-600 h-4 w-4"
+                />
+                <span class="text-xs text-gray-600">Mostrar</span>
+              </label>
             </div>
           </div>
         </div>
 
         <button
           type="submit"
-          class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
         >
-          Entrar
+          Iniciar sesión
         </button>
       </form>
 
-      <div class="text-center mt-4">
-        <a href="/" class="text-sm text-green-700 hover:underline">← Volver al inicio</a>
+      <div class="text-center mt-6">
+        <a href="/" class="text-sm text-blue-600 hover:underline">← Volver al inicio</a>
       </div>
     </div>
   </div>
@@ -82,15 +84,17 @@ const login = async () => {
 <style scoped>
 .input {
   width: 100%;
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 0.375rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #cbd5e1; /* slate-300 */
+  border-radius: 0.5rem;
   outline: none;
   font-size: 0.95rem;
-  transition: border-color 0.2s;
+  transition: all 0.2s ease;
+  background-color: #f9fafb;
 }
 .input:focus {
-  border-color: #16a34a; /* verde-600 */
-  box-shadow: 0 0 0 1px #16a34a;
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 0 1px #3b82f6;
+  background-color: #ffffff;
 }
 </style>

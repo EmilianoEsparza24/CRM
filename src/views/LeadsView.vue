@@ -1,36 +1,40 @@
 <template>
-  <div class="min-h-screen bg-green-100 text-gray-900">
+  <div class="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 text-gray-900">
     <!-- Navbar -->
     <Navbar @logout="logout" />
 
     <!-- Leads Table -->
     <div class="p-6 max-w-7xl mx-auto">
-      <h1 class="text-3xl font-bold text-green-700 mb-6">📋 Gestión de Leads</h1>
+      <h1 class="text-4xl font-bold text-blue-700 mb-8 text-center">📋 Panel de Leads</h1>
 
-      <div class="overflow-x-auto bg-white shadow-lg rounded-lg border border-green-200">
+      <div class="overflow-x-auto bg-white shadow-xl rounded-xl border border-blue-200">
         <table v-if="leads.length" class="w-full table-auto rounded overflow-hidden">
-          <thead class="bg-green-600 text-white">
+          <thead class="bg-blue-600 text-white text-sm uppercase">
             <tr>
-              <th class="p-3 text-left">Nombre</th>
-              <th class="p-3 text-left">Correo</th>
-              <th class="p-3 text-left">Teléfono</th>
-              <th class="p-3 text-left">Mensaje</th>
-              <th class="p-3 text-left">Estado</th>
-              <th class="p-3 text-left">Cambiar estado</th>
+              <th class="p-4 text-left">Nombre</th>
+              <th class="p-4 text-left">Correo</th>
+              <th class="p-4 text-left">Teléfono</th>
+              <th class="p-4 text-left">Mensaje</th>
+              <th class="p-4 text-left">Estado</th>
+              <th class="p-4 text-left">Cambiar estado</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="lead in paginatedLeads" :key="lead.id" class="border-t hover:bg-green-50 transition">
-              <td class="p-3">{{ lead.name }}</td>
-              <td class="p-3">{{ lead.email }}</td>
-              <td class="p-3">{{ lead.phone }}</td>
-              <td class="p-3">{{ lead.message }}</td>
-              <td class="p-3 capitalize font-medium text-green-700">{{ lead.status }}</td>
-              <td class="p-3">
+            <tr
+              v-for="lead in paginatedLeads"
+              :key="lead.id"
+              class="border-t hover:bg-blue-50 transition-colors text-sm"
+            >
+              <td class="p-4">{{ lead.name }}</td>
+              <td class="p-4">{{ lead.email }}</td>
+              <td class="p-4">{{ lead.phone }}</td>
+              <td class="p-4">{{ lead.message }}</td>
+              <td class="p-4 capitalize font-semibold text-blue-700">{{ lead.status }}</td>
+              <td class="p-4">
                 <select
                   v-model="lead.status"
                   @change="updateStatus(lead)"
-                  class="border border-green-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-green-200"
+                  class="border border-blue-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white"
                 >
                   <option value="nuevo">Nuevo</option>
                   <option value="contactado">Contactado</option>
@@ -40,23 +44,28 @@
             </tr>
           </tbody>
         </table>
-        <div v-if="totalPages > 1" class="flex justify-center items-center space-x-4 py-4">
+
+        <!-- Paginación -->
+        <div v-if="totalPages > 1" class="flex justify-center items-center space-x-4 py-6">
           <button
             @click="prevPage"
             :disabled="currentPage === 1"
-            class="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
-            Anterior
+            ← Anterior
           </button>
-          <span class="text-gray-700">Página {{ currentPage }} de {{ totalPages }}</span>
+          <span class="text-gray-700 font-medium">
+            Página {{ currentPage }} de {{ totalPages }}
+          </span>
           <button
             @click="nextPage"
             :disabled="currentPage === totalPages"
-            class="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
-            Siguiente
+            Siguiente →
           </button>
         </div>
+
         <p v-else class="p-6 text-gray-600 text-center">No hay leads disponibles por el momento.</p>
       </div>
     </div>
@@ -90,6 +99,7 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--
 }
+
 const fetchLeads = async () => {
   try {
     const res = await axios.get(import.meta.env.VITE_API_URL + '/leads', {
