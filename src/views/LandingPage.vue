@@ -111,11 +111,9 @@
       ></div>
 
       <!-- Botón enviar -->
-      <button
-        type="submit"
-        class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition"
-      >
-        Enviar
+      <button type="submit" class="btn btn-primary btn-submit" :disabled="isLoading">
+            <span v-if="isLoading">Enviando...</span>
+            <span v-else>Enviar</span>
       </button>
 
       <!-- Mensajes -->
@@ -180,6 +178,8 @@ const recaptchaWidgetId = ref(null)
 const apiUrl = import.meta.env.VITE_API_URL
 const recaptchaSiteKey = import.meta.env.VITE_SITE_KEY
 
+const isLoading = ref(false)
+
 if (!recaptchaSiteKey) {
   console.error('❌ No se encontró VITE_SITE_KEY en tu archivo .env')
 }
@@ -226,7 +226,8 @@ const handleSubmit = async () => {
     error.value = 'Completa el reCAPTCHA antes de continuar.'
     return
   }
-
+  
+  isLoading.value = true
   try {
     const res = await fetch(`${apiUrl}/contact`, {
       method: 'POST',
@@ -263,6 +264,8 @@ const handleSubmit = async () => {
     }
   } catch (e) {
     error.value = 'Error de red: ' + e.message
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
